@@ -11,10 +11,16 @@ function HomeScreen({ navigation }) {
 
   function renderItem({ item }) {
     return (
-      <TouchableOpacity onPress={() => {navigation.navigate("Details")}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Details", {
+            ...item, //spread operator instead of red: item.red
+          });
+        }}
+      >
         <BlockRGB red={item.red} green={item.green} blue={item.blue} />
       </TouchableOpacity>
-      );
+    );
   }
 
   function addColor() {
@@ -23,7 +29,7 @@ function HomeScreen({ navigation }) {
         red: Math.floor(Math.random() * 256),
         green: Math.floor(Math.random() * 256),
         blue: Math.floor(Math.random() * 256),
-        id: `${colorArray.length}` //string interpolation
+        id: `${colorArray.length}`, //string interpolation
       },
       ...colorArray,
     ]);
@@ -31,7 +37,10 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{height: 40, justifyContent: "center"}} onPress={addColor}>
+      <TouchableOpacity
+        style={{ height: 40, justifyContent: "center" }}
+        onPress={addColor}
+      >
         <Text>Add Color</Text>
       </TouchableOpacity>
       <FlatList style={styles.list} data={colorArray} renderItem={renderItem} />
@@ -39,10 +48,19 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function DetailsScreen() {
+function DetailsScreen({ route }) {
+  const { red, green, blue } = route.params;
+  // destructuring
+  // create a variable to represent an item in an object
+  // able to use {blue} instead of {route.params.blue} underneath
+
   return (
-    <View style={styles.container}>
-      <Text>Details Screen</Text>
+    <View style={[styles.detailsContainer, {
+      backgroundColor: `rgb(${red}, ${green}, ${blue})`
+    }]}>
+      <Text style={styles.detailsText}>Red: {red}</Text>
+      <Text style={styles.detailsText}>Green: {green}</Text>
+      <Text style={styles.detailsText}>Blue: {blue}</Text>
     </View>
   );
 }
@@ -64,5 +82,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  detailsContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  detailsText: {
+    fontSize: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
