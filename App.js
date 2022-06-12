@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import BlockRGB from "./components/BlockRGB";
 import { FlatList } from "react-native-gesture-handler";
-import { add, color } from "react-native-reanimated";
 
 function HomeScreen({ navigation }) {
   const [colorArray, setColorArray] = useState([]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Button onPress={addColor} title="Add color" />,
+    });
+  });
 
   function renderItem({ item }) {
     return (
@@ -37,12 +42,12 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{ height: 40, justifyContent: "center" }}
         onPress={addColor}
       >
         <Text>Add Color</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <FlatList style={styles.list} data={colorArray} renderItem={renderItem} />
     </View>
   );
@@ -55,9 +60,14 @@ function DetailsScreen({ route }) {
   // able to use {blue} instead of {route.params.blue} underneath
 
   return (
-    <View style={[styles.detailsContainer, {
-      backgroundColor: `rgb(${red}, ${green}, ${blue})`
-    }]}>
+    <View
+      style={[
+        styles.detailsContainer,
+        {
+          backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+        },
+      ]}
+    >
       <Text style={styles.detailsText}>Red: {red}</Text>
       <Text style={styles.detailsText}>Green: {green}</Text>
       <Text style={styles.detailsText}>Blue: {blue}</Text>
