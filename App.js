@@ -4,14 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import BlockRGB from "./components/BlockRGB";
 import { FlatList } from "react-native-gesture-handler";
-import { add } from "react-native-reanimated";
+import { add, color } from "react-native-reanimated";
 
 function HomeScreen() {
-  const [colorArray, setColorArray] = useState([
-    { red: 255, green: 0, blue: 0, id: "0" },
-    { red: 0, green: 255, blue: 0, id: "1" },
-    { red: 0, green: 0, blue: 255, id: "2" },
-  ]);
+  const [colorArray, setColorArray] = useState([]);
 
   function renderItem({ item }) {
     return <BlockRGB red={item.red} green={item.green} blue={item.blue} />;
@@ -26,12 +22,12 @@ function HomeScreen() {
         blue: Math.floor(Math.random() * 256),
         id: `${colorArray.length}`
       }
-    ])
+    ]);
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{ height: 40, justifyContent: "center"}} onPress={addColor}>
+      <TouchableOpacity style={{height: 40, justifyContent: "center"}} onPress={addColor}>
         <Text>Add Color</Text>
       </TouchableOpacity>
       <FlatList style={styles.list} data={colorArray} renderItem={renderItem} />
